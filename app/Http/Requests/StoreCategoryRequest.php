@@ -40,5 +40,4 @@ class StoreCategoryRequest extends FormRequest
         ];
     }
 
-    //Como recorrer un array en php
 }
