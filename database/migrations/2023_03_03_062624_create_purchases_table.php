@@ -15,6 +15,19 @@ return new class extends Migration
     {
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
+
+            $table->foreignId('provider_id')->constrained('providers');
+            $table->foreignId('user_id')->constrained('users');
+
+
+            $table->dateTime('purchase_date');
+            $table->decimal('tax');
+            $table->decimal('total');
+
+            $table->enum('status',['VALID','CANCELED'])->default('VALID');
+
+            $table->string('picture');
+
             $table->timestamps();
         });
     }
