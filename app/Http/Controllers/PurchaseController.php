@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Purchase;
 use App\Http\Requests\StorePurchaseRequest;
 use App\Http\Requests\UpdatePurchaseRequest;
+use App\Models\Provider;
 
 class PurchaseController extends Controller
 {
@@ -16,6 +17,8 @@ class PurchaseController extends Controller
     public function index()
     {
         //
+        $purchases = Purchase::get();
+        return view('admin.purchase.index', compact('purchases'));
     }
 
     /**
@@ -26,6 +29,8 @@ class PurchaseController extends Controller
     public function create()
     {
         //
+        $providers = Provider::get();
+        return view('admin.purchase.create', compact('providers'));
     }
 
     /**
@@ -37,6 +42,19 @@ class PurchaseController extends Controller
     public function store(StorePurchaseRequest $request)
     {
         //
+        $purchase = Purchase::create($request->all());
+
+        foreach($request->product_id as $key => $product){
+            $results[] = array(
+                "product_id"=>$request->product_id[$key], 
+                "quantity"=>$request->quantity[$key],
+                "price"=>$request->price[$key]
+            );
+        }
+
+        $purchase->purchaseDetails()->createMany($results);
+
+        return redirect()->route('purchase.index');
     }
 
     /**
@@ -59,6 +77,8 @@ class PurchaseController extends Controller
     public function edit(Purchase $purchase)
     {
         //
+        $providers = Provider::get();
+        return view('admin.purchase.show', compact('purchase'));
     }
 
     /**
